@@ -13,9 +13,18 @@ struct node
 {
   Ponto *p;
   struct node *next;
+  struct node *head;
   int emptyNodes;
 };
 typedef struct node Node;
+
+struct list
+{
+  Node *nodes;
+  Node *headNode;
+};
+
+typedef struct list List;
 
 Node *create(int x, int y)
 {
@@ -31,24 +40,30 @@ Node *create(int x, int y)
   return node;
 }
 
-Node *createNodes()
+List *createNodes()
 {
+  List *list = (List *)malloc(sizeof(List));
   Node *nodes = create(0, 0);
   nodes->emptyNodes = 1;
-  return nodes;
+  nodes->emptyNodes = 1;
+
+  list->nodes = nodes;
+  list->headNode = nodes;
+  return list;
 }
 
-void add(int x, int y, Node *node)
-{ // Last in, is first in list
-  if (node->emptyNodes == 1)
+void add(int x, int y, List *list)
+{
+  if (list->nodes->emptyNodes == 1)
   {
-    node->p->x = x;
-    node->p->y = y;
-    node->emptyNodes = 0;
+    list->nodes->p->x = x;
+    list->nodes->p->y = y;
+    list->nodes->emptyNodes = 0;
+    list->headNode = list->nodes;
   }
   else
   {
-    Node *aux = node;
+    Node *aux = list->nodes;
     while (aux->next != NULL)
     {
       if (aux == NULL)
@@ -61,9 +76,9 @@ void add(int x, int y, Node *node)
   }
 }
 
-void list(Node *node)
+void list(List *list)
 {
-  Node *aux = node;
+  Node *aux = list->headNode;
 
   do
   {
@@ -79,12 +94,12 @@ void list(Node *node)
 int main()
 {
 
-  Node *lista = createNodes();
-  add(1, 2, lista);
-  add(3, 4, lista);
-  add(5, 6, lista);
-  add(7, 8, lista);
-  add(9, 10, lista);
+  List *lista = createNodes();
+  float forLong = 1e4;
+  for (float i = 0; i < forLong; i++)
+  {
+    add((int)i, (int)i + 1, lista);
+  }
   list(lista);
 
   // float a = 1;
