@@ -76,31 +76,72 @@ void add(int x, int y, List *list)
   }
 }
 
+void removeList(int index, List *list)
+{
+  if (index == 0)
+  {
+    Node *aux = list->headNode;
+    list->headNode = list->headNode->next;
+    free(aux);
+  }
+
+  if (index > 0)
+  {
+    int indexCurrent = 0;
+    Node *aux = list->headNode;
+    Node *auxBefore;
+
+    while (aux->next != NULL)
+    {
+      if (indexCurrent < index && aux->next == NULL)
+        break;
+
+      if (indexCurrent == index)
+      {
+        auxBefore->next = aux->next != NULL ? aux->next : NULL;
+        break;
+      }
+
+      indexCurrent++;
+      auxBefore = aux != NULL ? aux : NULL;
+      aux = aux->next != NULL ? aux->next : NULL;
+    }
+
+    free(aux);
+  }
+}
+
 void list(List *list)
 {
   Node *aux = list->headNode;
 
-  do
+  while (aux != NULL)
   {
+
     printf("X: %d | Y: %d\n", aux->p->x, aux->p->y);
     aux = aux->next;
+  }
 
-    if (aux->next == NULL)
-      printf("X: %d | Y: %d\n", aux->p->x, aux->p->y);
-
-  } while (aux->next != NULL);
+  free(aux);
 }
 
 int main()
 {
 
   List *lista = createNodes();
-  float forLong = 1e4;
-  for (float i = 0; i < forLong; i++)
-  {
-    add((int)i, (int)i + 1, lista);
-  }
+  add(1, 2, lista);
+  add(3, 4, lista);
+  add(5, 6, lista);
+  add(7, 8, lista);
+  add(9, 10, lista);
   list(lista);
+  removeList(3, lista);
+  list(lista);
+  //  float forLong = 1e4;
+  //  for (float i = 0; i < forLong; i++)
+  //  {
+  //    add((int)i, (int)i + 1, lista);
+  //  }
 
   // float a = 1;
   // printf("%p\n", (int *)&a); // () converter, aqui estamos convertendo float para um ponteiro de int
